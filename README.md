@@ -2,4 +2,4 @@
 
 ## About
 
-This is mobile application for habits tracking.
+This is a mobile application for habits tracking.

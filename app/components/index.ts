@@ -8,7 +8,7 @@ export * from "./icon/icon";
 export * from "./screen/screen";
 export * from "./switch/switch";
 export * from "./text/text";
-export * from "./text/TextBreak";
+export * from "./text/text-break";
 export * from "./text-field/text-field";
 export * from "./wallpaper/wallpaper";
 export * from "./auto-image/auto-image";

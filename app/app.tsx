@@ -29,7 +29,7 @@ export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE";
 /**
  * This is the root component of our app.
  */
-function App() {
+export const App = () => {
   const [rootStore, setRootStore] = useState<RootStore | undefined>(undefined);
 
   useBackButtonHandler(canExit)
@@ -72,5 +72,3 @@ function App() {
     </ToggleStorybook>
   )
 }
-
-export default App;

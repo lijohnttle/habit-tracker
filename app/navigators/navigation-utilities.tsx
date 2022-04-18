@@ -6,6 +6,8 @@ import {
   NavigationAction,
   createNavigationContainerRef,
 } from "@react-navigation/native"
+import { canExit } from './app-navigator'
+import { StackNavigationProp } from '@react-navigation/stack'
 
 /* eslint-disable */
 export const RootNavigation = {
@@ -38,44 +40,32 @@ export function getActiveRouteName(state: NavigationState | PartialState<Navigat
  * Hook that handles Android back button presses and forwards those on to
  * the navigation or allows exiting the app.
  */
-export function useBackButtonHandler(canExit: (routeName: string) => boolean) {
-  const canExitRef = useRef(canExit)
-
+export function useBackButtonHandler(navigation: StackNavigationProp<any, any>) {
   useEffect(() => {
-    canExitRef.current = canExit
-  }, [canExit])
-
-  useEffect(() => {
-    // We'll fire this when the back button is pressed on Android.
     const onBackPress = () => {
       if (!navigationRef.isReady()) {
-        return false
+        return false;
       }
 
-      // grab the current route
-      const routeName = getActiveRouteName(navigationRef.getRootState())
+      const routeName = getActiveRouteName(navigationRef.getRootState());
 
-      // are we allowed to exit?
-      if (canExitRef.current(routeName)) {
-        // let the system know we've not handled this event
-        return false
+      if (canExit(routeName)) {
+        BackHandler.exitApp();
+        return true;
       }
 
-      // we can't exit, so let's turn this into a back action
       if (navigationRef.canGoBack()) {
-        navigationRef.goBack()
-        return true
+        navigationRef.goBack();
+        return true;
       }
 
-      return false
+      return false;
     }
 
-    // Subscribe when we come to life
-    BackHandler.addEventListener("hardwareBackPress", onBackPress)
+    const backHandler = BackHandler.addEventListener("hardwareBackPress", onBackPress);
 
-    // Unsubscribe when we're done
-    return () => BackHandler.removeEventListener("hardwareBackPress", onBackPress)
-  }, [])
+    return () => backHandler.remove;
+  }, [navigation]);
 }
 
 /**

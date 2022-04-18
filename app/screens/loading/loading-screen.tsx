@@ -1,7 +1,7 @@
 import React, { FC, useEffect } from 'react';
 import { View } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
-import { NavigatorParamList } from '../../navigators';
+import { NavigatorParamList, useBackButtonHandler } from '../../navigators';
 import { AutoImage, Screen, Text } from '../../components';
 import { color } from '../../theme';
 import { styles } from './loading-screen.styles';
@@ -11,6 +11,8 @@ const loader = require('./loader.gif');
 
 export const LoadingScreen: FC<StackScreenProps<NavigatorParamList, 'loading'>> = ({ navigation }) => {
   const nextScreen = () => navigation.navigate("dashboard");
+
+  useBackButtonHandler(navigation);
 
   useEffect(() => {
     setTimeout(() => nextScreen(), 2000);

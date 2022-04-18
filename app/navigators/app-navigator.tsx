@@ -8,28 +8,17 @@ import React from "react"
 import { useColorScheme } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { WelcomeScreen, DemoScreen, DemoListScreen } from "../screens"
+import { WelcomeScreen, DemoScreen, DemoListScreen, LoadingScreen } from "../screens"
 import { navigationRef } from "./navigation-utilities"
 
-/**
- * This type allows TypeScript to know what routes are defined in this navigator
- * as well as what properties (if any) they might take when navigating to them.
- *
- * If no params are allowed, pass through `undefined`. Generally speaking, we
- * recommend using your MobX-State-Tree store(s) to keep application state
- * rather than passing state through navigation params.
- *
- * For more information, see this documentation:
- *   https://reactnavigation.org/docs/params/
- *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
- */
-export type NavigatorParamList = {
-  welcome: undefined
-  demo: undefined
-  demoList: undefined
-}
 
-// Documentation: https://reactnavigation.org/docs/stack-navigator/
+export type NavigatorParamList = {
+  welcome: undefined,
+  demo: undefined,
+  demoList: undefined,
+  loading: undefined,
+};
+
 const Stack = createNativeStackNavigator<NavigatorParamList>()
 
 const AppStack = () => {
@@ -38,8 +27,9 @@ const AppStack = () => {
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName="welcome"
-    >
+      initialRouteName="loading"
+      >
+      <Stack.Screen name="loading" component={LoadingScreen} />
       <Stack.Screen name="welcome" component={WelcomeScreen} />
       <Stack.Screen name="demo" component={DemoScreen} />
       <Stack.Screen name="demoList" component={DemoListScreen} />
@@ -56,7 +46,7 @@ export const AppNavigator = (props: NavigationProps) => {
       ref={navigationRef}
       theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
       {...props}
-    >
+      >
       <AppStack />
     </NavigationContainer>
   )
@@ -73,5 +63,5 @@ AppNavigator.displayName = "AppNavigator"
  *
  * `canExit` is used in ./app/app.tsx in the `useBackButtonHandler` hook.
  */
-const exitRoutes = ["welcome"]
+const exitRoutes = ["loading", "welcome"];
 export const canExit = (routeName: string) => exitRoutes.includes(routeName)

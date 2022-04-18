@@ -26,7 +26,7 @@ export interface ScreenProps {
   /**
    * An optional status bar setting. Defaults to light-content.
    */
-  statusBar?: "light-content" | "dark-content"
+  statusBar?: "light-content" | "dark-content" | "hidden"
 
   /**
    * Should we not wrap in SafeAreaView? Defaults to false.

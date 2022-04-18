@@ -1,5 +1,5 @@
 import * as React from "react"
-import { KeyboardAvoidingView, Platform, ScrollView, StatusBar, View } from "react-native"
+import { KeyboardAvoidingView, Platform, ScrollView, StatusBar, StatusBarStyle, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { ScreenProps } from "./screen.props"
 import { isNonScrolling, offsets, presets } from "./screen.presets"
@@ -12,6 +12,7 @@ function ScreenWithoutScrolling(props: ScreenProps) {
   const style = props.style || {}
   const backgroundStyle = props.backgroundColor ? { backgroundColor: props.backgroundColor } : {}
   const insetStyle = { paddingTop: props.unsafe ? 0 : insets.top }
+  const statusBarStyle: StatusBarStyle = props.statusBar === "dark-content" ? "dark-content" : "light-content";
 
   return (
     <KeyboardAvoidingView
@@ -19,7 +20,7 @@ function ScreenWithoutScrolling(props: ScreenProps) {
       behavior={isIos ? "padding" : undefined}
       keyboardVerticalOffset={offsets[props.keyboardOffset || "none"]}
     >
-      <StatusBar barStyle={props.statusBar || "light-content"} />
+      <StatusBar barStyle={statusBarStyle} hidden={props.statusBar === "hidden"} />
       <View style={[preset.inner, style, insetStyle]}>{props.children}</View>
     </KeyboardAvoidingView>
   )
@@ -31,6 +32,7 @@ function ScreenWithScrolling(props: ScreenProps) {
   const style = props.style || {}
   const backgroundStyle = props.backgroundColor ? { backgroundColor: props.backgroundColor } : {}
   const insetStyle = { paddingTop: props.unsafe ? 0 : insets.top }
+  const statusBarStyle: StatusBarStyle = props.statusBar === "dark-content" ? "dark-content" : "light-content";
 
   return (
     <KeyboardAvoidingView
@@ -38,7 +40,7 @@ function ScreenWithScrolling(props: ScreenProps) {
       behavior={isIos ? "padding" : undefined}
       keyboardVerticalOffset={offsets[props.keyboardOffset || "none"]}
     >
-      <StatusBar barStyle={props.statusBar || "light-content"} />
+      <StatusBar barStyle={statusBarStyle} hidden={props.statusBar === "hidden"} />
       <View style={[preset.outer, backgroundStyle, insetStyle]}>
         <ScrollView
           style={[preset.outer, backgroundStyle]}

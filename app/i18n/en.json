@@ -7,6 +7,12 @@
   "errors": {
     "invalidEmail": "Invalid email address."
   },
+  "dashboardScreen": {
+    "title": "DASHBOARD",
+    "pending": "PENDING",
+    "complete": "COMPLETE",
+    "reset": "RESET"
+  },
   "welcomeScreen": {
     "poweredBy": "POWERED BY IGNITE",
     "readyForLaunch": "Ready for launch.",

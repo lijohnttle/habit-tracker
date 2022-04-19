@@ -8,7 +8,10 @@
     "invalidEmail": "Invalid email address."
   },
   "dashboardScreen": {
-    "title": "DASHBOARD"
+    "title": "DASHBOARD",
+    "pending": "PENDING",
+    "complete": "COMPLETE",
+    "reset": "RESET"
   },
   "welcomeScreen": {
     "poweredBy": "POWERED BY IGNITE",

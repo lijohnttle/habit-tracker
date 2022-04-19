@@ -7,4 +7,7 @@ export const styles = StyleSheet.create({
         backgroundColor: color.background,
         flex: 1,
     },
+    goalsContainer: {
+        backgroundColor: 'transparent',
+    },
 });

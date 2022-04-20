@@ -2,24 +2,21 @@ import React, { FC, useState } from 'react';
 import { View } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { observer } from 'mobx-react-lite';
 import { NavigatorParamList, useBackButtonHandler } from '../../navigators';
 import { styles } from './dashboard-screen.styles';
-import { Button, Header, Screen, Text } from '../../components';
+import { Button, Header, Screen } from '../../components';
 import { color } from '../../theme';
-import data from './fakeData.json';
 import { GoalsList } from './goals-list';
 import { translate } from '../../i18n';
+import { useStores } from '../../models';
 
-
-const fakeGoals = data.goalDefinitions.map((d, i) => ({
-    definition: d,
-    status: 'pending',
-}));
 
 const Tab = createMaterialTopTabNavigator();
 
-export const DashboardScreen: FC<StackScreenProps<NavigatorParamList,'dashboard'>> = ({ navigation }) => {
-    const [goals, setGoals] = useState(fakeGoals);
+export const DashboardScreen: FC<StackScreenProps<NavigatorParamList,'dashboard'>> = observer(({ navigation }) => {
+    const { goalDefinitionStore } = useStores();
+    const [goals, setGoals] = useState(goalDefinitionStore.goalDefinitions.map(definition => ({ definition: definition, status: 'pending' })));
     const [selectedGoal, setSelectedGoal] = useState(null);
 
     useBackButtonHandler(navigation);
@@ -109,4 +106,4 @@ export const DashboardScreen: FC<StackScreenProps<NavigatorParamList,'dashboard'
             </Screen>
         </View>
     );
-};
+});

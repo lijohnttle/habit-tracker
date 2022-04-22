@@ -10,28 +10,28 @@ const loader = require('./loader.gif');
 
 
 export const LoadingScreen: FC<StackScreenProps<NavigatorParamList, 'loading'>> = ({ navigation }) => {
-  const nextScreen = () => navigation.navigate("dashboard");
+    const nextScreen = () => navigation.navigate("dashboard");
 
-  useBackButtonHandler(navigation);
+    useBackButtonHandler(navigation);
 
-  useEffect(() => {
-    setTimeout(() => nextScreen(), 2000);
-  }, []);
+    useEffect(() => {
+        setTimeout(() => nextScreen(), 2000);
+    }, []);
 
-  return (
-    <View testID="LoadingScreen" style={styles.root}>
-      <Screen preset="fixed" statusBar="hidden" backgroundColor={color.transparent}>
-        <View style={[styles.centerVert, styles.centerHorz]}>
-          <Text style={styles.header} text="HABIT" />
-          <Text style={styles.header} text="TRACKER" />
+    return (
+        <View testID="LoadingScreen" style={styles.root}>
+            <Screen preset="fixed" statusBar="hidden" backgroundColor={color.transparent}>
+                <View style={[styles.centerVert, styles.centerHorz]}>
+                    <Text style={styles.header} text="HABIT" />
+                    <Text style={styles.header} text="TRACKER" />
 
-          <AutoImage style={styles.loader} source={loader} />
+                    <AutoImage style={styles.loader} source={loader} />
+                </View>
+
+                <View style={styles.logoWrapper}>
+                    <Text text="LIJOHNTTLE" />
+                </View>
+            </Screen>
         </View>
-
-        <View style={styles.logoWrapper}>
-          <Text text="LIJOHNTTLE" />
-        </View>
-      </Screen>
-    </View>
-  );
+    );
 };

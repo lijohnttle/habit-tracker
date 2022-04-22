@@ -3,6 +3,9 @@ import { color, spacing } from '../../theme';
 
 
 export const styles = StyleSheet.create({
+    root: {
+        flex: 1,
+    },
     itemsContainer: {
         paddingBottom: spacing[8],
     },

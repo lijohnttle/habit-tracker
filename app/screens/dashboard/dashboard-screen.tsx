@@ -1,69 +1,55 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { observer } from 'mobx-react-lite';
 import { NavigatorParamList, useBackButtonHandler } from '../../navigators';
 import { styles } from './dashboard-screen.styles';
-import { Button, Header, Screen, Text } from '../../components';
+import { Header, Screen } from '../../components';
 import { color } from '../../theme';
-import data from './fakeData.json';
-import { GoalsList } from './goals-list';
 import { translate } from '../../i18n';
+import { useStores } from '../../models';
+import { GoalAction, GoalActionCode } from '../../models/goal-action/goal-action';
+import { PendingGoalsTab } from './pending-goals-tab';
+import { CompleteGoalsTab } from './complete-goals-tab';
+import { GoalActionStore } from '../../models/goal-action-store/goal-action-store';
+import { GoalDefinitionStore } from '../../models/goal-definition-store/goal-definition-store';
+import { GoalDefinition } from '../../models/goal-definition/goal-definition';
 
 
-const fakeGoals = data.goalDefinitions.map((d, i) => ({
-    definition: d,
-    status: 'pending',
-}));
+const getCompleteGoals = (goalActionsStore: GoalActionStore): Array<GoalAction> => {
+    const from = new Date();
+    from.setHours(0,0,0,0);
+
+    const to = new Date();
+    to.setDate(from.getDate() + 1);
+
+    return goalActionsStore
+        .goalActions
+        .filter(t => {
+            const date = t.date;
+            return t.actionCode === GoalActionCode.complete &&
+                   date >= from.getTime() && date < to.getTime();
+        });
+};
+
+const getPendingGoals = (completeGoals: GoalAction[], goalDefinitionStore: GoalDefinitionStore): Array<GoalDefinition> => {
+    const completeGoalsDefinitions = new Set(completeGoals.map(t => t.definition));
+
+    return goalDefinitionStore
+        .goalDefinitions
+        .filter(t => !completeGoalsDefinitions.has(t))
+};
 
 const Tab = createMaterialTopTabNavigator();
 
-export const DashboardScreen: FC<StackScreenProps<NavigatorParamList,'dashboard'>> = ({ navigation }) => {
-    const [goals, setGoals] = useState(fakeGoals);
-    const [selectedGoal, setSelectedGoal] = useState(null);
+export const DashboardScreen: FC<StackScreenProps<NavigatorParamList,'dashboard'>> = observer(({ navigation }) => {
+    const { goalDefinitionStore, goalActionsStore } = useStores();
+    
+    const completeGoals = getCompleteGoals(goalActionsStore);
+    const pendingGoals = getPendingGoals(completeGoals, goalDefinitionStore);
 
     useBackButtonHandler(navigation);
-
-    const goalSelectionChangedHandler = (goalId) => {
-        if (goalId) {
-            const goal = goals.find(g => g.definition.id === goalId);
-
-            if (goal) {
-                setSelectedGoal(goal);
-            }
-            else {
-                setSelectedGoal(null);
-            }
-        }
-        else {
-            setSelectedGoal(null);
-        }
-    };
-
-    const updateGoalStatus = (goal,  newGoalStatus) => {
-        const goalIndex = goals.indexOf(goal);
-
-        if (goalIndex >= 0) {
-            const newGoals = [...goals];
-            const changedGoal = { ...newGoals[goalIndex] };
-            changedGoal.status = newGoalStatus;
-            newGoals[goalIndex] = changedGoal;
-            setGoals(newGoals);
-            setSelectedGoal(null);
-        }
-    };
-
-    const completeGoalHandler = () => {
-        if (selectedGoal) {
-            updateGoalStatus(selectedGoal, "complete");
-        }
-    };
-
-    const resetGoalHandler = () => {
-        if (selectedGoal) {
-            updateGoalStatus(selectedGoal, "pending");
-        }
-    };
 
     return (
         <View testID="DashboardScreen" style={styles.root}>
@@ -80,33 +66,19 @@ export const DashboardScreen: FC<StackScreenProps<NavigatorParamList,'dashboard'
                         tabBarStyle: {
                             backgroundColor: 'transparent',
                         },
-                    }}
-                    screenListeners={() => ({
-                        state: (e) => {
-                            setSelectedGoal(null);
-                        }
-                    })}>
+                    }}>
                     <Tab.Screen name={translate("dashboardScreen.pending")}>
                         {() => (
-                            <GoalsList
-                                goals={goals.filter(g => g.status === 'pending')}
-                                selectedGoalId={selectedGoal?.definition?.id}
-                                onSelectionChanged={goalSelectionChangedHandler} />
+                            <PendingGoalsTab pendingGoalDefinitions={pendingGoals} navigation={navigation} />
                         )}
                     </Tab.Screen>
                     <Tab.Screen name={translate("dashboardScreen.complete")}>
                         {() => (
-                            <GoalsList
-                                goals={goals.filter(g => g.status === 'complete')}
-                                selectedGoalId={selectedGoal?.definition?.id}
-                                onSelectionChanged={goalSelectionChangedHandler} />
+                            <CompleteGoalsTab completeGoalActions={completeGoals} navigation={navigation} />
                         )}
                     </Tab.Screen>
                 </Tab.Navigator>
-                
-                {selectedGoal?.status === "pending" ? <Button preset="primary" tx="dashboardScreen.complete" onPress={completeGoalHandler} /> : null}
-                {selectedGoal?.status === "complete" ? <Button preset="danger" tx="dashboardScreen.reset" onPress={resetGoalHandler} /> : null}
             </Screen>
         </View>
     );
-};
+});

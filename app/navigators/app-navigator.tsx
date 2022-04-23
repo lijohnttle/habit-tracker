@@ -4,6 +4,7 @@ import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/
 import { WelcomeScreen, DashboardScreen } from '../screens';
 import { navigationRef } from './navigation-utilities';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { Menu } from './menu';
 
 
 export type NavigatorParamList = {
@@ -22,6 +23,7 @@ const AppDrawer = () => {
             screenOptions={{
                 headerShown: false,
             }}
+            drawerContent={(props) => <Menu {...props} />}
             initialRouteName="dashboard">
             <Drawer.Screen name="dashboard" component={DashboardScreen} options={{ title: 'DASHBOARD' }} />
             <Drawer.Screen name="goals" component={WelcomeScreen} options={{ title: 'GOALS' }} />

@@ -7,7 +7,6 @@ import {
     createNavigationContainerRef,
 } from "@react-navigation/native"
 import { canExit } from './app-navigator'
-import { DrawerNavigationProp } from '@react-navigation/drawer'
 
 /* eslint-disable */
 export const RootNavigation = {

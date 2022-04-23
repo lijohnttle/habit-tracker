@@ -1,19 +1,26 @@
-import * as React from "react"
-import { View, ImageStyle } from "react-native"
-import { AutoImage as Image } from "../auto-image/auto-image"
-import { IconProps } from "./icon.props"
-import { icons } from "./icons"
-
-const ROOT: ImageStyle = {
-  resizeMode: "contain",
-}
+import React from 'react';
+import { SvgProps } from 'react-native-svg';
+import { color } from '../../theme';
+import { IconProps } from './icon.props';
+import { icons } from './icons';
 
 export function Icon(props: IconProps) {
-  const { style: styleOverride, icon, containerStyle } = props
+    const { icon } = props;
+    const defaultProps: SvgProps = {
+        width: 32,
+        height: 32,
+        stroke: color.text,
+        fill: color.text,
+    };
 
-  return (
-    <View style={containerStyle}>
-      <Image style={[ROOT, styleOverride]} source={icons[icon]} />
-    </View>
-  )
+    const finalProps = {
+        ...defaultProps,
+        ...props,
+    };
+
+    return (
+        <>
+            {icons[icon](finalProps)}
+        </>
+    );
 }

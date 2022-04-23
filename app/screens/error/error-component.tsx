@@ -69,7 +69,7 @@ export interface ErrorComponentProps {
 export const ErrorComponent = (props: ErrorComponentProps) => {
   return (
     <View style={CONTAINER}>
-      <Icon style={ICON} icon="bug" />
+      <Icon style={ICON} icon="error" />
       <Text style={TITLE_ERROR} tx={"errorScreen.title"} />
       <Text style={FRIENDLY_SUBTITLE} tx={"errorScreen.friendlySubtitle"} />
       <View style={ERROR_DETAILS_CONTAINER}>

@@ -58,6 +58,10 @@ export const DashboardScreen: FC<DrawerScreenProps<NavigatorParamList,'dashboard
                 <Header
                     headerTx="dashboardScreen.title"
                     rightIcon="menu"
+                    rightIconProps={{
+                        width: 32,
+                        height: 32,
+                    }}
                     onRightPress={() => navigation.openDrawer()} />
 
                 <Tab.Navigator

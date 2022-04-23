@@ -15,6 +15,7 @@ import { CompleteGoalsTab } from './complete-goals-tab';
 import { GoalActionStore } from '../../models/goal-action-store/goal-action-store';
 import { GoalDefinitionStore } from '../../models/goal-definition-store/goal-definition-store';
 import { GoalDefinition } from '../../models/goal-definition/goal-definition';
+import { DrawerScreenProps } from '@react-navigation/drawer';
 
 
 const getCompleteGoals = (goalActionsStore: GoalActionStore): Array<GoalAction> => {
@@ -43,7 +44,7 @@ const getPendingGoals = (completeGoals: GoalAction[], goalDefinitionStore: GoalD
 
 const Tab = createMaterialTopTabNavigator();
 
-export const DashboardScreen: FC<StackScreenProps<NavigatorParamList,'dashboard'>> = observer(({ navigation }) => {
+export const DashboardScreen: FC<DrawerScreenProps<NavigatorParamList,'dashboard'>> = observer(({ navigation }) => {
     const { goalDefinitionStore, goalActionsStore } = useStores();
     
     const completeGoals = getCompleteGoals(goalActionsStore);
@@ -54,7 +55,10 @@ export const DashboardScreen: FC<StackScreenProps<NavigatorParamList,'dashboard'
     return (
         <View testID="DashboardScreen" style={styles.root}>
             <Screen preset="fixed" backgroundColor={color.transparent}>
-                <Header headerTx="dashboardScreen.title" />
+                <Header
+                    headerTx="dashboardScreen.title"
+                    rightIcon="menu"
+                    onRightPress={() => navigation.openDrawer()} />
 
                 <Tab.Navigator
                     tabBarPosition="top"

@@ -7,19 +7,29 @@ import { AppNavigator } from './navigators';
 import { RootStore, RootStoreProvider, setupRootStore } from './models';
 import { ToggleStorybook } from '../storybook/toggle-storybook';
 import { ErrorBoundary } from './screens/error/error-boundary';
+import { LoadingScreen } from './screens';
 
 
 export const App = () => {
     const [rootStore, setRootStore] = useState<RootStore | undefined>(undefined);
+    const [loadingDelayedComplete, setLoadingDelayComplete] = useState<Boolean>(false);
 
     useEffect(() => {
         ;(async () => {
             await initFonts(); // expo
             setupRootStore().then(setRootStore);
-        })()
+        })();
     }, []);
 
-    if (!rootStore) return null;
+    if (!rootStore && !loadingDelayedComplete) {
+        return (
+            <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+                <ErrorBoundary catchErrors={"always"}>
+                    <LoadingScreen onDelayComplete={() => setLoadingDelayComplete(true)} />
+                </ErrorBoundary>
+            </SafeAreaProvider>
+        );
+    }
 
     return (
         <ToggleStorybook>
@@ -32,4 +42,4 @@ export const App = () => {
             </RootStoreProvider>
         </ToggleStorybook>
     )
-}
+};

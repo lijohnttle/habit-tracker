@@ -4,7 +4,6 @@ import { spacing } from '../../theme';
 export const styles = StyleSheet.create({
     root: {
         flexDirection: 'row',
-        paddingHorizontal: spacing[5],
         alignItems: 'center',
         paddingTop: spacing[2],
         paddingBottom: spacing[2],
@@ -17,5 +16,11 @@ export const styles = StyleSheet.create({
     titleContainer: {
         flex: 1,
         justifyContent: 'center',
+        paddingHorizontal: spacing[5],
     },
+    buttonRight: {
+        marginRight: spacing[2],
+        width: 32,
+        height: 32,
+    }
 });

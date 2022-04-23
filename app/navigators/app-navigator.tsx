@@ -1,36 +1,34 @@
-import React from 'react'
-import { useColorScheme } from 'react-native'
-import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { WelcomeScreen, DemoScreen, DemoListScreen, LoadingScreen, DashboardScreen } from '../screens'
-import { navigationRef } from './navigation-utilities'
+import React from 'react';
+import { useColorScheme } from 'react-native';
+import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
+import { WelcomeScreen, DashboardScreen } from '../screens';
+import { navigationRef } from './navigation-utilities';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { Menu } from './menu';
 
 
 export type NavigatorParamList = {
     welcome: undefined,
     demo: undefined,
     demoList: undefined,
-    loading: undefined,
     dashboard: undefined,
+    goals: undefined,
 };
 
-const Stack = createNativeStackNavigator<NavigatorParamList>()
+const Drawer = createDrawerNavigator<NavigatorParamList>();
 
-const AppStack = () => {
+const AppDrawer = () => {
     return (
-        <Stack.Navigator
+        <Drawer.Navigator
             screenOptions={{
                 headerShown: false,
             }}
-            initialRouteName="loading"
-            >
-            <Stack.Screen name="loading" component={LoadingScreen} />
-            <Stack.Screen name="dashboard" component={DashboardScreen} />
-            <Stack.Screen name="welcome" component={WelcomeScreen} />
-            <Stack.Screen name="demo" component={DemoScreen} />
-            <Stack.Screen name="demoList" component={DemoListScreen} />
-        </Stack.Navigator>
-    )
+            drawerContent={(props) => <Menu {...props} />}
+            initialRouteName="dashboard">
+            <Drawer.Screen name="dashboard" component={DashboardScreen} options={{ title: 'DASHBOARD' }} />
+            <Drawer.Screen name="goals" component={WelcomeScreen} options={{ title: 'GOALS' }} />
+        </Drawer.Navigator>
+    );
 };
 
 interface NavigationProps extends Partial<React.ComponentProps<typeof NavigationContainer>> {};
@@ -43,7 +41,7 @@ export const AppNavigator = (props: NavigationProps) => {
             theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
             {...props}
             >
-            <AppStack />
+            <AppDrawer />
         </NavigationContainer>
     )
 };
@@ -59,5 +57,5 @@ AppNavigator.displayName = 'AppNavigator';
  *
  * `canExit` is used in ./app/app.tsx in the `useBackButtonHandler` hook.
  */
-const exitRoutes = ['loading', 'dashboard', 'welcome'];
+const exitRoutes = ['dashboard', 'welcome'];
 export const canExit = (routeName: string) => exitRoutes.includes(routeName);

@@ -1,6 +1,7 @@
 import { StyleProp, TextStyle, ViewStyle } from 'react-native';
 import { IconTypes } from '../icon/icons';
 import { TxKeyPath } from '../../i18n';
+import { SvgProps } from 'react-native-svg';
 
 export interface HeaderProps {
   /**
@@ -17,6 +18,7 @@ export interface HeaderProps {
    * Icon that should appear on the left.
    */
   leftIcon?: IconTypes;
+  leftIconProps?: SvgProps;
 
   /**
    * What happens when you press the left icon.
@@ -27,6 +29,7 @@ export interface HeaderProps {
    * Icon that should appear on the right.
    */
   rightIcon?: IconTypes;
+  rightIconProps?: SvgProps;
 
   /**
    * What happens when you press the right icon.

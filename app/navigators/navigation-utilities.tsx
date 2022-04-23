@@ -7,7 +7,6 @@ import {
     createNavigationContainerRef,
 } from "@react-navigation/native"
 import { canExit } from './app-navigator'
-import { StackNavigationProp } from '@react-navigation/stack'
 
 /* eslint-disable */
 export const RootNavigation = {
@@ -40,7 +39,7 @@ export function getActiveRouteName(state: NavigationState | PartialState<Navigat
  * Hook that handles Android back button presses and forwards those on to
  * the navigation or allows exiting the app.
  */
-export function useBackButtonHandler(navigation: StackNavigationProp<any, any>) {
+export function useBackButtonHandler(navigation: any) {
     useEffect(() => {
         const onBackPress = () => {
             if (!navigationRef.isReady()) {
